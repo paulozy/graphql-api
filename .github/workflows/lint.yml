@@ -1,0 +1,30 @@
+name: Check Lint
+
+on: 
+  pull_request:
+    branches: master
+
+jobs: 
+  code:
+    name: Lint checker
+    runs-on: ubuntu-latest
+    env: 
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        
+      - name: Set up Node
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: '16.x'
+        
+      - name: Install dependencies
+        run: yarn
+      
+      - name: Run ESLint
+        run: yarn lint
+   
