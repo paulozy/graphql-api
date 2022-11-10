@@ -18,7 +18,7 @@ describe("Requisitions tests", () => {
 
     const response = await request(app).post("/graphql").send({ query });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(200);
     expect(response.body.data.warriors).toStrictEqual(data.warriors);
   });
 
