@@ -1,8 +1,6 @@
 name: Check Lint Commit
 
-on: 
-  pull_request:
-    branches: master
+on: ["push", "pull_request"]
 
 jobs: 
   code:
