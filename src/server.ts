@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { Request, Response } from "express";
+import express, { Response } from "express";
 
 import { router } from "./routes";
 
@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_, res: Response) => {
   res.json({ message: "Hello World!" });
 });
 

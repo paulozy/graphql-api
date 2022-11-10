@@ -1,39 +1,76 @@
+import { Warrior } from "../domain/entities";
+
+interface IWarriorsConnectionArgs {
+  first: number;
+  last: number;
+  after: string;
+  before: string;
+}
+
+interface IPageInfo {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string | null;
+  endCursor: string | null;
+}
+
 export const resolvers = {
   Query: {
-    warriors: (obj: any, args: any, context: any, info: any) =>
-      context.warriors,
-    warrior: (obj: any, args: any, context: any, info: any) => {
+    warriors: (
+      _obj: unknown,
+      _args: unknown,
+      context: Warrior[]
+    ): Warrior[] => {
+      console.log(context);
+      return context;
+    },
+
+    warrior: (
+      _obj: unknown,
+      args: { id: string },
+      context: Warrior[]
+    ): Warrior => {
       const { id } = args;
 
-      const warrior = context.warriors.filter(
-        (warrior: any) => warrior.id === Number(id)
+      const warrior = context.filter(
+        (warrior: Warrior) => warrior.id === Number(id)
       )[0];
 
       return warrior;
     },
-    warriorsConnection: (obj: any, args: any, context: any, info: any) => {
+
+    warriorsConnection: (
+      _obj: unknown,
+      args: IWarriorsConnectionArgs,
+      context: Warrior[]
+    ) => {
       const { after, before, first, last } = args;
 
-      let edges: any[] = [];
-      let pageInfo: any = {};
+      let edges: Warrior[] = context;
+      let pageInfo: IPageInfo = {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: null,
+        endCursor: null,
+      };
 
       if (first) {
-        edges = context.warriors.slice(0, first);
+        edges = context.slice(0, first);
 
         pageInfo = {
-          hasNextPage: context.warriors.length > first,
+          hasNextPage: context.length > first,
           hasPreviousPage: false,
-          startCursor: edges[0].id,
-          endCursor: edges[edges.length - 1].id,
+          startCursor: String(edges[0].id),
+          endCursor: String(edges[edges.length - 1].id),
         };
 
         if (after) {
-          edges = context.warriors.slice(
-            context.warriors.findIndex(
-              (warrior: any) => warrior.id === Number(after)
+          edges = context.slice(
+            context.findIndex(
+              (warrior: Warrior) => warrior.id === Number(after)
             ) + 1,
-            context.warriors.findIndex(
-              (warrior: any) => warrior.id === Number(after)
+            context.findIndex(
+              (warrior: Warrior) => warrior.id === Number(after)
             ) +
               1 +
               first
@@ -42,40 +79,37 @@ export const resolvers = {
           pageInfo = {
             hasNextPage: edges.length > first,
             hasPreviousPage: true,
-            startCursor: edges[0].id,
-            endCursor: edges[edges.length - 1].id,
+            startCursor: String(edges[0].id),
+            endCursor: String(edges[edges.length - 1].id),
           };
         }
       }
 
       if (last) {
-        edges = context.warriors.slice(
-          context.warriors.length - last,
-          context.warriors.length
-        );
+        edges = context.slice(context.length - last, context.length);
 
         pageInfo = {
           hasNextPage: false,
-          hasPreviousPage: context.warriors.length > last,
-          startCursor: edges[0].id,
-          endCursor: edges[edges.length - 1].id,
+          hasPreviousPage: context.length > last,
+          startCursor: String(edges[0].id),
+          endCursor: String(edges[edges.length - 1].id),
         };
 
         if (before) {
-          edges = context.warriors.slice(
-            context.warriors.findIndex(
-              (warrior: any) => warrior.id === Number(before)
+          edges = context.slice(
+            context.findIndex(
+              (warrior: Warrior) => warrior.id === Number(before)
             ) - last,
-            context.warriors.findIndex(
-              (warrior: any) => warrior.id === Number(before)
+            context.findIndex(
+              (warrior: Warrior) => warrior.id === Number(before)
             )
           );
 
           pageInfo = {
             hasNextPage: true,
             hasPreviousPage: edges.length > last,
-            startCursor: edges[0].id,
-            endCursor: edges[edges.length - 1].id,
+            startCursor: String(edges[0].id),
+            endCursor: String(edges[edges.length - 1].id),
           };
         }
       }

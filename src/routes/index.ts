@@ -17,7 +17,7 @@ router.use(
   "/graphql",
   graphqlHTTP({
     schema: executableSchema,
-    context: data,
+    context: data.warriors,
     graphiql: true,
   })
 );
