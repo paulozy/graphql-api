@@ -21,6 +21,10 @@ export const resolvers = {
       _args: unknown,
       context: Warrior[]
     ): Warrior[] => {
+      const untilVar = "until";
+
+      console.log(untilVar);
+
       return context;
     },
 
