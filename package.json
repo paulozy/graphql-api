@@ -7,9 +7,9 @@
     "dev": "tsnd --respawn --transpile-only src/server.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --watchAll --detectOpenHandles --forceExit",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --watchAll --detectOpenHandles",
     "test:verbose": "jest --passWithNoTests --runInBand",
-    "test:ci": "npx jest --coverage --silent"
+    "test:ci": "npx jest --coverage --silent --detectOpenHandles --forceExit"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
