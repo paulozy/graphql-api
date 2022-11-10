@@ -35,6 +35,8 @@ export const resolvers = {
         (warrior: Warrior) => warrior.id === id
       )[0];
 
+      console.log(warrior);
+
       return warrior;
     },
 
