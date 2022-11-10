@@ -21,7 +21,6 @@ export const resolvers = {
       _args: unknown,
       context: Warrior[]
     ): Warrior[] => {
-      console.log(context);
       return context;
     },
 
@@ -33,7 +32,7 @@ export const resolvers = {
       const { id } = args;
 
       const warrior = context.filter(
-        (warrior: Warrior) => warrior.id === Number(id)
+        (warrior: Warrior) => warrior.id === id
       )[0];
 
       return warrior;
@@ -60,18 +59,14 @@ export const resolvers = {
         pageInfo = {
           hasNextPage: context.length > first,
           hasPreviousPage: false,
-          startCursor: String(edges[0].id),
-          endCursor: String(edges[edges.length - 1].id),
+          startCursor: edges[0].id,
+          endCursor: edges[edges.length - 1].id,
         };
 
         if (after) {
           edges = context.slice(
-            context.findIndex(
-              (warrior: Warrior) => warrior.id === Number(after)
-            ) + 1,
-            context.findIndex(
-              (warrior: Warrior) => warrior.id === Number(after)
-            ) +
+            context.findIndex((warrior: Warrior) => warrior.id === after) + 1,
+            context.findIndex((warrior: Warrior) => warrior.id === after) +
               1 +
               first
           );
@@ -79,8 +74,8 @@ export const resolvers = {
           pageInfo = {
             hasNextPage: edges.length > first,
             hasPreviousPage: true,
-            startCursor: String(edges[0].id),
-            endCursor: String(edges[edges.length - 1].id),
+            startCursor: edges[0].id,
+            endCursor: edges[edges.length - 1].id,
           };
         }
       }
@@ -91,25 +86,22 @@ export const resolvers = {
         pageInfo = {
           hasNextPage: false,
           hasPreviousPage: context.length > last,
-          startCursor: String(edges[0].id),
-          endCursor: String(edges[edges.length - 1].id),
+          startCursor: edges[0].id,
+          endCursor: edges[edges.length - 1].id,
         };
 
         if (before) {
           edges = context.slice(
-            context.findIndex(
-              (warrior: Warrior) => warrior.id === Number(before)
-            ) - last,
-            context.findIndex(
-              (warrior: Warrior) => warrior.id === Number(before)
-            )
+            context.findIndex((warrior: Warrior) => warrior.id === before) -
+              last,
+            context.findIndex((warrior: Warrior) => warrior.id === before)
           );
 
           pageInfo = {
             hasNextPage: true,
             hasPreviousPage: edges.length > last,
-            startCursor: String(edges[0].id),
-            endCursor: String(edges[edges.length - 1].id),
+            startCursor: edges[0].id,
+            endCursor: edges[edges.length - 1].id,
           };
         }
       }

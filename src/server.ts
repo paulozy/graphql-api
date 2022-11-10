@@ -3,7 +3,7 @@ import express, { Response } from "express";
 
 import { router } from "./routes";
 
-const app = express();
+export const app = express();
 
 app.use(cors());
 app.use(express.json());
